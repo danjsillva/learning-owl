@@ -1,5 +1,14 @@
 const { Component, mount, xml } = owl;
 
+class Task extends Component {
+  static template = xml/* xml */ `
+    <div class="task" t-att-class="props.task.isCompleted ? 'done' : ''">
+      <input type="checkbox" t-att-checked="props.task.isCompleted"/>
+      <span><t t-esc="props.task.text"/></span>
+    </div>`;
+  static props = ["task"];
+}
+
 class Root extends Component {
   tasks = [
     {
@@ -16,13 +25,11 @@ class Root extends Component {
 
   static template = xml/* xml */ `
     <div class="task-list">
-        <t t-foreach="tasks" t-as="task" t-key="task.id">
-            <div class="task" t-att-class="task.isCompleted ? 'done' : ''">
-                <input type="checkbox" t-att-checked="task.isCompleted"/>
-                <span><t t-esc="task.text"/></span>
-            </div>
-        </t>
+      <t t-foreach="tasks" t-as="task" t-key="task.id">
+        <Task task="task"/>
+      </t>
     </div>`;
+  static components = { Task };
 }
 
 mount(Root, document.body);
